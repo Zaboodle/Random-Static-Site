@@ -1,1 +1,1 @@
-uv run src/test_htmlnode.py
+python3 -m unittest discover -s src
