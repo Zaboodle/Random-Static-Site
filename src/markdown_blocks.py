@@ -1,7 +1,9 @@
 from enum import Enum
+
 from htmlnode import ParentNode
 from inline_markdown import text_to_textnodes
-from textnode import text_node_to_html, TextNode, TextType
+from textnode import text_node_to_html_node, TextNode, TextType
+
 
 class BlockType(Enum):
     PARAGRAPH = "paragraph"
@@ -10,6 +12,7 @@ class BlockType(Enum):
     QUOTE = "quote"
     OLIST = "ordered_list"
     ULIST = "unordered_list"
+
 
 def markdown_to_blocks(markdown):
     blocks = markdown.split("\n\n")
@@ -20,6 +23,7 @@ def markdown_to_blocks(markdown):
         block = block.strip()
         filtered_blocks.append(block)
     return filtered_blocks
+
 
 def block_to_block_type(block):
     lines = block.split("\n")
@@ -46,6 +50,7 @@ def block_to_block_type(block):
             i += 1
         return BlockType.OLIST
     return BlockType.PARAGRAPH
+
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
@@ -77,7 +82,7 @@ def text_to_children(text):
     text_nodes = text_to_textnodes(text)
     children = []
     for text_node in text_nodes:
-        html_node = text_node_to_html(text_node)
+        html_node = text_node_to_html_node(text_node)
         children.append(html_node)
     return children
 
@@ -108,7 +113,7 @@ def code_to_html_node(block):
         raise ValueError("invalid code block")
     text = block[4:-3]
     raw_text_node = TextNode(text, TextType.TEXT)
-    child = text_node_to_html(raw_text_node)
+    child = text_node_to_html_node(raw_text_node)
     code = ParentNode("code", [child])
     return ParentNode("pre", [code])
 
